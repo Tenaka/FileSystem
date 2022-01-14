@@ -1,4 +1,4 @@
-﻿<#
+<#
 Update the path of Import and Duplicates. Import is where all files and subfolders are located that require sorting.
 
 There are 2 sections to the script that can be executed independently or as a single script. The first compares file hashes and moves any duplicates to the duplicate folder. The second part sorts the files by date creating a year folder and a month subfolder.
@@ -7,13 +7,11 @@ There are 2 sections to the script that can be executed independently or as a si
 Although tested this has not been rigorously tested and I take no responsibility for any data loss. So be careful. 
 #>
 
-$path = "D:\Images\import"
-$duplicates = "D:\Images\duplicates"
-
+$path = "C:\Data"
+$duplicates = "$path\duplicates"
 New-Item $duplicates -ItemType Directory -Force
 
-$files = Get-ChildItem -Path $path -Recurse -File
-
+$files = Get-ChildItem -Path $path -Recurse  -File | where {$_.DirectoryName -notmatch  "duplicates"}
 $fileHashes = @()
 
 foreach($file in $files)
@@ -35,19 +33,17 @@ foreach($file in $files)
                 break
             }
         }
-        if($isDuplicate)
+    if($isDuplicate)
         {
-           $nextName = Join-Path -Path $duplicates -ChildPath $_.name 
-
-        while(Test-Path -Path $nextName)
+            $nextName = Join-Path -Path $duplicates -ChildPath $_.name 
+            while(Test-Path -Path $nextName)
         {
-       $nextName = Join-Path $duplicates ($file.BaseName + "_$num" + $file.Extension)    
-       $num+=1   
-    }
-
+            $nextName = Join-Path $duplicates ($file.BaseName + "_$num" + $file.Extension)    
+            $num+=1   
+        }
             Move-Item -Path $file.FullName -Destination "$nextname" -Verbose
         }
-        else
+            else
         {
             $fileHashes += @($thisFileHash.Hash)
         }
@@ -55,7 +51,7 @@ foreach($file in $files)
 }
 
 
-$file = Get-ChildItem $path -Recurse -File | Select-Object *
+$file = Get-ChildItem $path -Recurse -File | where {$_.DirectoryName -notmatch  "duplicates"} | Select-Object *
 #files that are moved to folders based on year and month
 foreach ($fi in $file)
 {
