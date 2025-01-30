@@ -1,4 +1,5 @@
-﻿$fld = "C:\Logs\Folder1"
+﻿#Monitor folders for any changes
+$fld = "C:\Logs\Folder1"
 $fld2 = "C:\Logs\Folder2"
 $fil = '*.*'
 
