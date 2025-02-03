@@ -1,4 +1,4 @@
-﻿<#
+<#
 This script organizes files in a directory. 
 1. It detects duplicates using SHA256 hashes and moves them to a "duplicates" folder.
 2. It organizes the remaining files by their last write date into Year/Month subfolders.
@@ -119,16 +119,34 @@ foreach ($file in $gtFiles)
                             {
                                 if (-not (Test-Path -Path "$($destination)")) 
                                     {
-                                        Move-Item -Path $file.FullName -Destination $destination -Verbose
-                                            Write-MoveLog "File '$($file.FullName)' moved to '$duplicateName'." "INFO"
+                                        try 
+                                            {
+                                                Move-Item -Path $file.FullName -Destination $destination -Verbose
+                                                    Write-MoveLog "File '$($file.FullName)' moved to '$duplicateName'." "INFO"
+                                            }
+                                        catch
+                                            {
+                                                    Write-MoveLog "File '$($file.FullName)' failed to move to '$duplicateName'." "ERROR"
+                                                contine
+                                            }
+
+
                                     }
                                 if (Test-Path -Path "$($destination)\$($file.Name)") 
                                     {
                                         $duplicateName = Join-Path $duplicatesPath -ChildPath ("{0}_{1}{2}" -f $file.BaseName, $counter, $file.Extension)
                                         $counter++
-
-                                        Move-Item -Path $file.FullName -Destination $duplicateName -Verbose
-                                            Write-MoveLog "File '$($file.FullName)' moved to '$duplicateName'." "WARNING"
+                                                                               
+                                        try 
+                                            {
+                                                Move-Item -Path $file.FullName -Destination $duplicateName -Verbose
+                                                    Write-MoveLog "File '$($file.FullName)' moved to '$duplicateName'." "WARNING"
+                                            }
+                                        catch
+                                            {
+                                                    Write-MoveLog "File '$($file.FullName)' failed to move to '$duplicateName'." "ERROR"
+                                                contine
+                                            }
                                    }
                             } 
                         catch 
