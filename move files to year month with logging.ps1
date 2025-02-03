@@ -127,7 +127,7 @@ foreach ($file in $gtFiles)
                                         catch
                                             {
                                                     Write-MoveLog "File '$($file.FullName)' failed to move to '$duplicateName'." "ERROR"
-                                                contine
+                                                continue
                                             }
 
 
@@ -145,7 +145,7 @@ foreach ($file in $gtFiles)
                                         catch
                                             {
                                                     Write-MoveLog "File '$($file.FullName)' failed to move to '$duplicateName'." "ERROR"
-                                                contine
+                                                continue
                                             }
                                    }
                             } 
