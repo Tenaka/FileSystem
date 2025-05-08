@@ -1,4 +1,4 @@
-﻿<#
+<#
 This script organizes files in a directory. 
 1. It detects duplicates using SHA256 hashes and moves them to a "duplicates" folder.
 2. It organizes the remaining files by their date:
@@ -63,7 +63,7 @@ function Get-DateTaken {
     
     try {
         # Check if this is an image file
-        $imageExtensions = @('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif')
+        $imageExtensions = @('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.mp4') #, '.*')  # can be any file
         $extension = [System.IO.Path]::GetExtension($FilePath).ToLower()
         
         if ($imageExtensions -contains $extension) {
