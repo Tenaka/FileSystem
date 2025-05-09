@@ -181,10 +181,10 @@ foreach ($file in $gtFiles) {
             # Try to get date taken for images, fall back to LastWriteTime for other files
             $fileDate = Get-DateTaken -FilePath $file.FullName
             
-            # If date taken is not available, use last write time
+            # If date taken is not available, use Creation Time
             if ($null -eq $fileDate) {
-                $fileDate = $file.LastWriteTime
-                Write-MoveLog "Using LastWriteTime for '$($file.FullName)': $fileDate" "INFO"
+                $fileDate = $file.CreationTime      #dont use last write time as it cant find the attribute on some MPV4
+                Write-MoveLog "Using CreationTime for '$($file.FullName)': $fileDate" "INFO"
             } else {
                 Write-MoveLog "Using DateTaken for '$($file.FullName)': $fileDate" "INFO"
             }
